@@ -25,16 +25,39 @@ server.listen(9999);
 server.on('connection', function(socket){
 	console.log('new connection is on.');
 	socket.write("Hello\n");
-
+	
+	//when typing event(stdin) is notified
 	process.stdin.on('data', function(data){
+		// if(data.toString() == "exit\n"){
+		// 	//socket.destroy();
+		// 	console.log("are you sure?");
+		// }
 		socket.write(data);
+
 	})
 	//when client has sended 'data'
 	socket.on('data', function(chunk){
+		
+		var message = chunk.toString();
 		//print string
-		console.log(chunk.toString());
-		//send back echo message to client.
-		socket.write("you are saying "+chunk.toString());
+		console.log(message);
+
+		//handle message 
+		if(message == "exit\n"){
+			//destroy the socket if client write "exit".
+			socket.destroy();
+		}else{
+			//send back echo message to client.
+			socket.write("you are saying "+message);
+
+		}
+		
+	});
+
+	//when socket destroy
+	socket.on('end', function(){
+		socket.write("disconnected");
+		//console.log(disconnected);
 	});
 });
 
