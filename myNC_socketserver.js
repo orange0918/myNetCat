@@ -38,7 +38,7 @@ server.on('connection', function(socket){
 	//when client has sended 'data'
 	socket.on('data', function(chunk){
 		
-		var message = chunk.toString();
+		var message = chunk.toString().trim();
 		//print string
 		console.log(message);
 
